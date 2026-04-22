@@ -3,15 +3,36 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const getAllEvents = async (req, res) => {
-    try{
-        const activeEvents = await prisma.event.findMany({
-            where: {status: "OPEN"}
-        });
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
 
-        return res.status(200).json(activeEvents);
-    } catch (error){
-        return res.status(500).json({message: "something went wrong"});
-    }
+    const skip = (page - 1) * limit;
+
+    const events = await prisma.event.findMany({
+      where: { status: "OPEN" },
+      skip: skip,
+      take: limit,
+      orderBy: {
+        date: "asc"
+      }
+    });
+
+    const total = await prisma.event.count({
+      where: { status: "OPEN" }
+    });
+
+    return res.status(200).json({
+      page,
+      limit,
+      total,
+      events
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
 };
 
 export const createEvent = async (req, res) => {
@@ -111,4 +132,93 @@ export const getMyEvents = async (req, res) => {
         console.error(error);
         return res.status(500).json({message: "Something went wrong"});
     }
+};
+
+export const closeEvent = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const event = await prisma.event.findUnique({
+            where: {id}
+        });
+        if(!event){
+            return res.status(404).json({message: "Event not found"});
+        }
+
+        const updatedEvent = await prisma.event.update({
+            where: { id },
+            data: {
+                status: "CLOSED"
+            }
+        });
+        return res.status(200).json({
+            message: "Event closed succesfully",
+            event: updatedEvent
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({message: "Something went wrong"});
+    }
+};
+
+export const getEventParticipants = async (req, res) => {
+    try{
+        const { id } = req.params;
+
+        const event = await prisma.event.findUnique({
+            where: { id }
+        });
+
+        if(!event) {
+            return res.status(404).json({message: "Event not found"});
+        }
+
+        const participants = await prisma.registration.findMany({
+            where: {
+                eventId: id
+            },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
+                }
+            }
+        });
+
+        return res.status(200).json({
+            event: event.title,
+            participants
+        });
+    } catch(error){
+        console.error(error);
+        return res.status(500).json({message: "Something went wrong"});
+    }
+}
+
+export const deleteEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const event = await prisma.event.findUnique({
+      where: { id }
+    });
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    await prisma.event.delete({
+      where: { id }
+    });
+
+    return res.status(200).json({
+      message: "Event deleted successfully"
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
 };
