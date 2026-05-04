@@ -7,7 +7,7 @@ import { deleteEvent } from "../controllers/events.controller.js";
 
 const router = express.Router();
 
-router.get("/", getAllEvents);
+router.get("/", authMiddleware, getAllEvents);
 
 router.post(
     "/",

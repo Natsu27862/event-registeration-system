@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0d0d2b;
+  color: white;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background: #1a1a3d;
+}
+
+.navbar button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 40px;
+}
+
+/* Welcome */
+.welcome {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.stat-card {
+  background: #1f1f4d;
+  padding: 20px;
+  border-radius: 12px;
+  width: 180px;
+  text-align: center;
+}
+
+/* Section */
+.section-title {
+  margin-left: 40px;
+}
+
+/* Events */
+.events {
+  display: flex;
+  gap: 20px;
+  padding: 20px 40px;
+}
+
+.event-card {
+  background: #1f1f4d;
+  padding: 20px;
+  border-radius: 12px;
+  width: 300px;
+}
+
+.progress {
+  background: #444;
+  height: 8px;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+.progress-bar {
+  background: orange;
+  height: 100%;
+  border-radius: 5px;
+}
+
+/* Button */
+.register-btn {
+  width: 100%;
+  padding: 10px;
+  background: orange;
+  border: none;
+  border-radius: 8px;
+  color: white;
+}

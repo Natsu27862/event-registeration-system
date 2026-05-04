@@ -8,6 +8,8 @@ export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    console.log("Incoming:", name, email, password);
+
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -27,16 +29,14 @@ export const signup = async (req, res) => {
         name,
         email,
         password: hashedPassword,
+       
       },
     });
 
+    console.log("User created:", newUser.email);
+
     res.status(201).json({
       message: "User created successfully",
-      user: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-      },
     });
 
   } catch (error) {
@@ -69,7 +69,8 @@ export const login = async (req, res) => {
 
         const token = jwt.sign({
             userId: user.id,
-            role: user.role
+            role: user.role,
+            name: user.name
         },
         process.env.JWT_SECRET,
         {expiresIn: "1h"}

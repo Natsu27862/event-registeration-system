@@ -4,31 +4,24 @@ const prisma = new PrismaClient();
 
 export const getAllEvents = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 5;
-
-    const skip = (page - 1) * limit;
+    const userId = req.user?.userId;
 
     const events = await prisma.event.findMany({
-      where: { status: "OPEN" },
-      skip: skip,
-      take: limit,
-      orderBy: {
-        date: "asc"
-      }
+      include: {
+        registrations: userId
+          ? {
+              where: { userId },
+            }
+          : false,
+      },
     });
 
-    const total = await prisma.event.count({
-      where: { status: "OPEN" }
-    });
+    const formattedEvents = events.map((event) => ({
+      ...event,
+      isRegistered: event.registrations?.length > 0,
+    }));
 
-    return res.status(200).json({
-      page,
-      limit,
-      total,
-      events
-    });
-
+    return res.status(200).json(formattedEvents);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Something went wrong" });
