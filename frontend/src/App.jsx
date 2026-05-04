@@ -11,7 +11,7 @@ function getUserFromToken() {
     const payload = JSON.parse(atob(token.split(".")[1]));
     return {
       name: payload.name,
-      role: payload.role
+      role: payload.role,
     };
   } catch {
     return null;
@@ -19,35 +19,42 @@ function getUserFromToken() {
 }
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem("token")
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [isSignup, setIsSignup] = useState(false);
 
   const user = getUserFromToken();
 
-  if (!isLoggedIn || !user) {
-  return <Login onLogin={() => setIsLoggedIn(true)} />;
-}
-
-  if (isLoggedIn) {
-    return (
-      <HomePage
-        user={user}
-        onLogout={() => {
-          localStorage.removeItem("token");
-          setIsLoggedIn(false);
-        }}
+  if (!isLoggedIn) {
+    return isSignup ? (
+      <Signup
+        onSignup={() => setIsSignup(false)}
+        goToLogin={() => setIsSignup(false)}
+      />
+    ) : (
+      <Login
+        onLogin={() => setIsLoggedIn(true)}
+        goToSignup={() => setIsSignup(true)}
       />
     );
   }
 
-  return isSignup ? (
-    <Signup onSignup={() => setIsSignup(false)} />
-  ) : (
-    <Login
-      onLogin={() => setIsLoggedIn(true)}
-      goToSignup={() => setIsSignup(true)}
+  if (!user) {
+    localStorage.removeItem("token");
+    return (
+      <Login
+        onLogin={() => setIsLoggedIn(true)}
+        goToSignup={() => setIsSignup(true)}
+      />
+    );
+  }
+
+  return (
+    <HomePage
+      user={user}
+      onLogout={() => {
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+      }}
     />
   );
 }

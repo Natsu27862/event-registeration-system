@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Signup({ onSignup }) {
+function Signup({ onSignup, goToLogin }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,6 +91,27 @@ function Signup({ onSignup }) {
         >
           {isLoading ? "Creating..." : "Sign Up"}
         </button>
+        <p
+  style={{
+    marginTop: "16px",
+    fontSize: "14px",
+    background: "linear-gradient(135deg, #667eea, #764ba2)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  }}
+>
+  Already have an account?{" "}
+  <span
+    onClick={goToLogin}
+    style={{
+      cursor: "pointer",
+      fontWeight: "bold",
+      textDecoration: "underline",
+    }}
+  >
+    Log in
+  </span>
+</p>
       </div>
     </div>
   );
