@@ -2,6 +2,7 @@ import { useState } from "react";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import CoordinatorDashboard from "./pages/CoordinatorDashboard";
 
 function getUserFromToken() {
   const token = localStorage.getItem("token");
@@ -48,15 +49,28 @@ function App() {
     );
   }
 
+ if (user.role === "ADMIN") {
   return (
-    <HomePage
+    <CoordinatorDashboard
       user={user}
-      onLogout={() => {
+      onBack={() => {
         localStorage.removeItem("token");
         setIsLoggedIn(false);
       }}
     />
   );
+}
+console.log("USER FROM TOKEN:", user);
+
+return (
+  <HomePage
+    user={user}
+    onLogout={() => {
+      localStorage.removeItem("token");
+      setIsLoggedIn(false);
+    }}
+  />
+);
 }
 
 export default App;
