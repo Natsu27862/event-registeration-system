@@ -48,6 +48,7 @@ function Login({ onLogin, goToSignup }) {
       </div>
 
       <div style={styles.card}>
+        <div style={styles.gloss}></div>
         <div style={styles.logoWrapper}>
           <span style={styles.logoEmoji}>🎓</span>
         </div>
@@ -203,15 +204,37 @@ const styles = {
   },
   card: {
     position: "relative",
-    background: "rgba(255,255,255,0.98)",
+
+    background: "rgba(255, 255, 255, 0.08)",
+
+    backdropFilter: "blur(18px)",
+    WebkitBackdropFilter: "blur(18px)",
+
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+
     borderRadius: "40px",
     padding: "48px",
     width: "100%",
     maxWidth: "450px",
     textAlign: "center",
-    boxShadow: "0 25px 50px rgba(0,0,0,0.3)",
+
+    boxShadow:
+      "0 25px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25)",
+
     zIndex: 10,
     animation: "cardEnter 0.6s ease-out",
+    overflow: "hidden",
+  },
+
+  gloss: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "50%",
+    background:
+      "linear-gradient(to bottom, rgba(255,255,255,0.25), transparent)",
+    pointerEvents: "none",
   },
   logoWrapper: {
     width: "90px",
@@ -235,18 +258,29 @@ const styles = {
     WebkitTextFillColor: "transparent",
     marginBottom: "8px",
   },
-  subtitle: { color: "#666", marginBottom: "32px" },
+  subtitle: {
+    color: "rgba(255,255,255,0.7)",
+    marginBottom: "32px",
+  },
   inputGroup: { marginBottom: "24px" },
   input: {
     width: "100%",
     padding: "16px",
-    border: "2px solid #e5e7eb",
+
+    background: "rgba(255,255,255,0.08)",
+    backdropFilter: "blur(10px)",
+
+    border: "1px solid rgba(255,255,255,0.2)",
     borderRadius: "20px",
+
+    color: "#fff",
     fontSize: "16px",
     marginBottom: "16px",
     boxSizing: "border-box",
-    transition: "all 0.3s",
+
+    outline: "none",
   },
+
   loginBtn: {
     width: "100%",
     padding: "16px",

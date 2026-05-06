@@ -215,3 +215,18 @@ export const deleteEvent = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const openEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const event = await prisma.event.update({
+      where: { id },
+      data: { status: "OPEN" },
+    });
+
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ message: "Error opening event" });
+  }
+};

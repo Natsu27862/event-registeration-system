@@ -85,6 +85,25 @@ export const closeEvent = async (id) => {
   const token = localStorage.getItem("token");
 
   const res = await fetch(`http://localhost:5000/events/${id}/close`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.status === 401) {
+    localStorage.removeItem("token");
+    window.location.reload();
+    return null;
+  }
+
+  return res.json();
+};
+
+export const openEvent = async (id) => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`http://localhost:5000/events/${id}/open`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,

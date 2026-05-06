@@ -5,6 +5,7 @@ import {
   createEvent,
   deleteEvent,
   closeEvent,
+  openEvent,
 } from "../services/api";
 
 function CoordinatorDashboard({ user, onBack }) {
@@ -79,37 +80,50 @@ function CoordinatorDashboard({ user, onBack }) {
       console.error(err);
     }
   };
+
+  const handleOpenEvent = async () => {
+    try {
+      await openEvent(selectedEvent.id);
+
+      const updated = await getEvents();
+      setEvents(updated);
+
+      const updatedEvent = updated.find((e) => e.id === selectedEvent.id);
+      setSelectedEvent(updatedEvent);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleCloseEvent = async () => {
-  try {
-    await closeEvent(selectedEvent.id);
+    try {
+      await closeEvent(selectedEvent.id);
 
-    const updated = await getEvents();
-    setEvents(updated);
+      const updated = await getEvents();
+      setEvents(updated);
 
-    const updatedEvent = updated.find(e => e.id === selectedEvent.id);
-    setSelectedEvent(updatedEvent);
+      const updatedEvent = updated.find((e) => e.id === selectedEvent.id);
+      setSelectedEvent(updatedEvent);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  } catch (err) {
-    console.error(err);
-  }
-};
+  const handleDeleteEvent = async () => {
+    const confirmDelete = window.confirm("Delete this event?");
+    if (!confirmDelete) return;
 
-const handleDeleteEvent = async () => {
-  const confirmDelete = window.confirm("Delete this event?");
-  if (!confirmDelete) return;
+    try {
+      await deleteEvent(selectedEvent.id);
 
-  try {
-    await deleteEvent(selectedEvent.id);
+      const updated = await getEvents();
+      setEvents(updated);
 
-    const updated = await getEvents();
-    setEvents(updated);
-
-    setSelectedEvent(null);
-
-  } catch (err) {
-    console.error(err);
-  }
-};
+      setSelectedEvent(null);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   if (!selectedEvent) {
     return (
@@ -402,6 +416,19 @@ const handleDeleteEvent = async () => {
               <button
                 style={{
                   ...styles.fullWidthBtn,
+                  ...styles.openBtn,
+                  opacity: selectedEvent.status === "OPEN" ? 0.6 : 1,
+                  cursor:
+                    selectedEvent.status === "OPEN" ? "not-allowed" : "pointer",
+                }}
+                onClick={handleOpenEvent}
+                disabled={selectedEvent.status === "OPEN"}
+              >
+                Open Registration
+              </button>
+              <button
+                style={{
+                  ...styles.fullWidthBtn,
                   ...styles.closeBtn,
                   opacity: selectedEvent.status === "CLOSED" ? 0.6 : 1,
                   cursor:
@@ -458,29 +485,29 @@ const handleDeleteEvent = async () => {
 
 const styles = {
   eventActions: {
-  marginTop: "12px",
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px",
-},
+    marginTop: "12px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
 
-fullWidthBtn: {
-  width: "100%",            
-  padding: "12px",
-  borderRadius: "10px",
-  fontWeight: "600",
-  border: "none",
-},
+  fullWidthBtn: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    fontWeight: "600",
+    border: "none",
+  },
 
-closeBtn: {
-  background: "linear-gradient(135deg, #f59e0b, #d97706)",
-  color: "#fff",
-},
+  closeBtn: {
+    background: "linear-gradient(135deg, #f59e0b, #d97706)",
+    color: "#fff",
+  },
 
-deleteBtn: {
-  background: "linear-gradient(135deg, #ef4444, #dc2626)",
-  color: "#fff",
-},
+  deleteBtn: {
+    background: "linear-gradient(135deg, #ef4444, #dc2626)",
+    color: "#fff",
+  },
   eventsGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
@@ -645,6 +672,11 @@ deleteBtn: {
     cursor: "pointer",
     fontWeight: "600",
   },
+
+  openBtn: {
+  background: "linear-gradient(135deg, #22c55e, #16a34a)",
+  color: "#fff",
+},
 
   backBtn: {
     padding: "8px 20px",
@@ -941,14 +973,20 @@ deleteBtn: {
 
   navbar: {
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
-    padding: "16px 24px",
-    background: "rgba(255,255,255,0.08)",
-    backdropFilter: "blur(12px)",
-    borderBottom: "1px solid rgba(255,255,255,0.1)",
-  },
+    justifyContent: "space-between",
 
+    padding: "12px 24px",
+    borderRadius: "20px",
+
+    background: "rgba(30, 30, 30, 0.6)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+
+    border: "1px solid rgba(255,255,255,0.08)",
+
+    boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
+  },
   logo: {
     fontSize: "20px",
     fontWeight: "bold",
@@ -975,12 +1013,16 @@ deleteBtn: {
 
   logoutBtn: {
     padding: "8px 16px",
-    background: "#ef4444",
-    color: "white",
-    border: "none",
-    borderRadius: "20px",
+    borderRadius: "12px",
+
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.2)",
+
+    color: "#fff",
+    fontWeight: "500",
+
     cursor: "pointer",
-    fontWeight: "600",
+    transition: "all 0.2s ease",
   },
 
   modalOverlay: {

@@ -44,13 +44,14 @@ function Signup({ onSignup, goToLogin }) {
       </div>
 
       <div style={styles.card}>
+        <div style={styles.gloss}></div>
         <div style={styles.logoWrapper}>
           <span style={styles.logoEmoji}>🎓</span>
         </div>
 
         <h1 style={styles.title}>Create Account</h1>
         <p style={styles.subtitle}>Join FestHub 🚀</p>
-
+        <div style={styles.inputGroup}>
         <input
           type="text"
           placeholder="Enter Name"
@@ -92,26 +93,27 @@ function Signup({ onSignup, goToLogin }) {
           {isLoading ? "Creating..." : "Sign Up"}
         </button>
         <p
-  style={{
-    marginTop: "16px",
-    fontSize: "14px",
-    background: "linear-gradient(135deg, #667eea, #764ba2)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  }}
->
-  Already have an account?{" "}
-  <span
-    onClick={goToLogin}
-    style={{
-      cursor: "pointer",
-      fontWeight: "bold",
-      textDecoration: "underline",
-    }}
-  >
-    Log in
-  </span>
-</p>
+          style={{
+            marginTop: "16px",
+            fontSize: "14px",
+            background: "linear-gradient(135deg, #667eea, #764ba2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Already have an account?{" "}
+          <span
+            onClick={goToLogin}
+            style={{
+              cursor: "pointer",
+              fontWeight: "bold",
+              textDecoration: "underline",
+            }}
+          >
+            Log in
+          </span>
+        </p>
+        </div>
       </div>
     </div>
   );
@@ -217,16 +219,58 @@ const styles = {
   },
   card: {
     position: "relative",
-    background: "rgba(255,255,255,0.98)",
+
+    background: "rgba(255, 255, 255, 0.08)",
+
+    backdropFilter: "blur(18px)",
+    WebkitBackdropFilter: "blur(18px)",
+
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+
     borderRadius: "40px",
     padding: "48px",
     width: "100%",
     maxWidth: "450px",
     textAlign: "center",
-    boxShadow: "0 25px 50px rgba(0,0,0,0.3)",
+
+    boxShadow:
+      "0 25px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25)",
+
     zIndex: 10,
     animation: "cardEnter 0.6s ease-out",
+    overflow: "hidden",
   },
+
+  gloss: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "50%",
+    background:
+      "linear-gradient(to bottom, rgba(255,255,255,0.25), transparent)",
+    pointerEvents: "none",
+  },
+
+  inputGroup: { marginBottom: "24px" },
+  input: {
+    width: "100%",
+    padding: "16px",
+
+    background: "rgba(255,255,255,0.08)",
+    backdropFilter: "blur(10px)",
+
+    border: "1px solid rgba(255,255,255,0.2)",
+    borderRadius: "20px",
+
+    color: "#fff",
+    fontSize: "16px",
+    marginBottom: "16px",
+    boxSizing: "border-box",
+
+    outline: "none",
+  },
+
   logoWrapper: {
     width: "90px",
     height: "90px",
@@ -251,16 +295,7 @@ const styles = {
   },
   subtitle: { color: "#666", marginBottom: "32px" },
   inputGroup: { marginBottom: "24px" },
-  input: {
-    width: "100%",
-    padding: "16px",
-    border: "2px solid #e5e7eb",
-    borderRadius: "20px",
-    fontSize: "16px",
-    marginBottom: "16px",
-    boxSizing: "border-box",
-    transition: "all 0.3s",
-  },
+  
   loginBtn: {
     width: "100%",
     padding: "16px",

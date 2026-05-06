@@ -18,22 +18,22 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
 
   useEffect(() => {
     const fetchEvents = async () => {
-  try {
-    const data = await getEvents();
+      try {
+        const data = await getEvents();
 
-    if (Array.isArray(data)) {
-      setEventsData(data);
-    } else if (Array.isArray(data.events)) {
-      setEventsData(data.events);
-    } else {
-      console.error("Invalid response:", data);
-      setEventsData([]); // fallback
-    }
-  } catch (err) {
-    console.error(err);
-    setEventsData([]); // prevent crash
-  }
-};
+        if (Array.isArray(data)) {
+          setEventsData(data);
+        } else if (Array.isArray(data.events)) {
+          setEventsData(data.events);
+        } else {
+          console.error("Invalid response:", data);
+          setEventsData([]); // fallback
+        }
+      } catch (err) {
+        console.error(err);
+        setEventsData([]); // prevent crash
+      }
+    };
 
     fetchEvents();
   }, []);
@@ -660,15 +660,20 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
       {/* Navbar */}
       <div
         style={{
-          background: "rgba(255,255,255,0.95)",
-          backdropFilter: "blur(10px)",
-          padding: "12px 25px",
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
+          justifyContent: "space-between",
+
+          padding: "12px 24px",
+          borderRadius: "20px",
+
+          background: "rgba(50, 50, 50, 0.25)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+
+          border: "1px solid rgba(255,255,255,0.08)",
+
+          boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -701,7 +706,7 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
           >
             {user?.name ? user.name.charAt(0) : "U"}
           </div>
-          <span style={{ fontWeight: "500", color: "#333", fontSize: "14px" }}>
+          <span style={{ fontWeight: "500", color: "#FFFFFF", fontSize: "14px" }}>
             👋 {user?.name || "User"}
           </span>
           {user.role === "coordinator" && (
@@ -740,14 +745,17 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
           )}
           <button
             style={{
-              padding: "6px 18px",
-              background: "#ef4444",
-              color: "white",
-              border: "none",
-              borderRadius: "40px",
-              fontWeight: "600",
-              cursor: "pointer",
-              fontSize: "13px",
+              padding: "8px 16px",
+  borderRadius: "12px",
+
+  background: "rgba(255,255,255,0.05)",
+  border: "1px solid rgba(255,255,255,0.2)",
+
+  color: "#fff",
+  fontWeight: "500",
+
+  cursor: "pointer",
+  transition: "all 0.2s ease",
             }}
             onClick={onLogout}
           >
@@ -873,7 +881,7 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
         >
           <div style={{ fontSize: "36px" }}>✅</div>
           <div style={{ fontSize: "28px", fontWeight: "bold", color: "white" }}>
-            {eventsData.filter(e => e.isRegistered).length}
+            {eventsData.filter((e) => e.isRegistered).length}
           </div>
           <div
             style={{
@@ -899,7 +907,11 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
         >
           <div style={{ fontSize: "36px" }}>🏆</div>
           <div style={{ fontSize: "28px", fontWeight: "bold", color: "white" }}>
-            {attended.length + eventsData.filter(e => e.isRegistered).length >= 3 ? "🎖️" : "🌱"}
+            {attended.length +
+              eventsData.filter((e) => e.isRegistered).length >=
+            3
+              ? "🎖️"
+              : "🌱"}
           </div>
           <div
             style={{
@@ -908,7 +920,9 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
               marginTop: "6px",
             }}
           >
-            {attended.length + eventsData.filter(e => e.isRegistered).length >= 3
+            {attended.length +
+              eventsData.filter((e) => e.isRegistered).length >=
+            3
               ? "Pro Attendee"
               : "Getting Started"}
           </div>
