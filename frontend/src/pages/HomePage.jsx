@@ -124,7 +124,17 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
         return;
       }
 
+      if (event.status === "CLOSED") {
+        toast.error("🚫 Event is closed");
+        return;
+      }
+
       const res = await registerEvent(event.id, token);
+
+      if (res.message === "Event is closed") {
+        toast.error("🚫 Event is closed");
+        return;
+      }
 
       if (res.message) {
         toast.success(res.message);
@@ -396,7 +406,12 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
               borderRadius: "10px",
               fontWeight: "600",
               color: "white",
-              background: isDone ? "#9ca3af" : "#f59e0b",
+              background:
+                event.status === "CLOSED"
+                  ? "#6b7280"
+                  : isDone
+                    ? "#9ca3af"
+                    : "#f59e0b",
               cursor: isDone ? "not-allowed" : "pointer",
             }}
             onClick={(e) => {
@@ -405,9 +420,13 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
 
               handleRegister(event);
             }}
-            disabled={isDone}
+            disabled={isDone || event.status === "CLOSED"}
           >
-            {isDone ? "✅ Registered" : "📝 REGISTER"}
+            {event.status === "CLOSED"
+              ? "🚫 Event Closed"
+              : isDone
+                ? "✅ Registered"
+                : "📝 REGISTER"}
           </button>
         </div>
       </div>
@@ -706,7 +725,9 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
           >
             {user?.name ? user.name.charAt(0) : "U"}
           </div>
-          <span style={{ fontWeight: "500", color: "#FFFFFF", fontSize: "14px" }}>
+          <span
+            style={{ fontWeight: "500", color: "#FFFFFF", fontSize: "14px" }}
+          >
             👋 {user?.name || "User"}
           </span>
           {user.role === "coordinator" && (
@@ -746,16 +767,16 @@ function HomePage({ user, onLogout, onViewCoordinator, onViewTeacher }) {
           <button
             style={{
               padding: "8px 16px",
-  borderRadius: "12px",
+              borderRadius: "12px",
 
-  background: "rgba(255,255,255,0.05)",
-  border: "1px solid rgba(255,255,255,0.2)",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.2)",
 
-  color: "#fff",
-  fontWeight: "500",
+              color: "#fff",
+              fontWeight: "500",
 
-  cursor: "pointer",
-  transition: "all 0.2s ease",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
             }}
             onClick={onLogout}
           >
