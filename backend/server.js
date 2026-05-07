@@ -9,13 +9,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://your-frontend.vercel.app"
-  ],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "https://event-registeration-system.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/events", eventsRoutes);
