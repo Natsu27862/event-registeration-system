@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "https://event-registeration-system.vercel.app",
+    origin: true,
     credentials: true,
   })
 );
