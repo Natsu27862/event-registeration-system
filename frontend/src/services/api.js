@@ -1,5 +1,6 @@
-const BASE_URL = "http://localhost:5000";
-
+const BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+  
 const handleAuthError = (res) => {
   if (res.status === 401) {
     localStorage.removeItem("token");
@@ -13,7 +14,7 @@ const handleAuthError = (res) => {
 export const getEvents = async () => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch("http://localhost:5000/events", {
+  const res = await fetch(`${BASE_URL}/events`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -39,7 +40,7 @@ export const getEventRegistrations = async (eventId) => {
   const token = localStorage.getItem("token");
 
   const res = await fetch(
-    `http://localhost:5000/events/${eventId}/participants`,
+    `${BASE_URL}/events/${eventId}/participants`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -54,7 +55,7 @@ export const getEventRegistrations = async (eventId) => {
 export const createEvent = async (data) => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch("http://localhost:5000/events", {
+  const res = await fetch(`${BASE_URL}/events`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -70,7 +71,7 @@ export const createEvent = async (data) => {
 export const deleteEvent = async (id) => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`http://localhost:5000/events/${id}`, {
+  const res = await fetch(`${BASE_URL}/events/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -84,7 +85,7 @@ export const deleteEvent = async (id) => {
 export const closeEvent = async (id) => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`http://localhost:5000/events/${id}/close`, {
+  const res = await fetch(`${BASE_URL}/events/${id}/close`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -103,7 +104,7 @@ export const closeEvent = async (id) => {
 export const openEvent = async (id) => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`http://localhost:5000/events/${id}/open`, {
+  const res = await fetch(`${BASE_URL}/events/${id}/open`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -118,3 +119,5 @@ export const openEvent = async (id) => {
 
   return res.json();
 };
+
+export default BASE_URL;

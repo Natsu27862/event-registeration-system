@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import BASE_URL from "../services/api";
 
 function Login({ onLogin, goToSignup }) {
   const [email, setEmail] = useState("");
@@ -9,7 +10,7 @@ function Login({ onLogin, goToSignup }) {
     try {
       setIsLoading(true);
 
-      const res = await fetch("http://localhost:5000/auth/login", {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

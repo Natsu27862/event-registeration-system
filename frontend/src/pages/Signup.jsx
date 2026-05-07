@@ -1,4 +1,5 @@
 import { useState } from "react";
+import BASE_URL from "../services/api";
 
 function Signup({ onSignup, goToLogin }) {
   const [name, setName] = useState("");
@@ -11,7 +12,7 @@ function Signup({ onSignup, goToLogin }) {
     try {
       setIsLoading(true);
 
-      const res = await fetch("http://localhost:5000/auth/signup", {
+      const res = await fetch(`${BASE_URL}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

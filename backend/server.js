@@ -7,9 +7,15 @@ import eventsRoutes from "./routes/events.routes.js";
 dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://your-frontend.vercel.app"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/events", eventsRoutes);
